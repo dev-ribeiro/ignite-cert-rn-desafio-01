@@ -41,7 +41,10 @@ export function Home() {
   }
 
   function handleRemoveTask(id: number) {
-    //TODO - remove task from state
+    const todos = [...tasks];
+    const removeTodoById = todos.filter(todo => todo.id !== id);
+
+    setTasks(removeTodoById);
   }
 
   return (
