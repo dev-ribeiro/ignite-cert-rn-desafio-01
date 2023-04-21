@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 
 import { Header } from '../components/Header';
 import { Task, TasksList } from '../components/TasksList';
@@ -9,6 +9,14 @@ export function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   function handleAddTask(newTaskTitle: string) {
+    const todos = [...tasks]
+    const taskTitleAlreadyExists = todos.find(todo => todo.title === newTaskTitle)
+
+    if (taskTitleAlreadyExists) {
+      Alert.alert('Task já cadastrada', 'Você não pode cadastrar uma task com o mesmo nome')
+      return
+    }
+
     const newTodo: Task = {
       id: new Date().getMilliseconds(),
       done: false,
@@ -22,13 +30,13 @@ export function Home() {
     const todos = [...tasks];
     const findTodoById = todos.find(todo => todo.id === id);
 
-    if(!findTodoById) {
+    if (!findTodoById) {
       return;
     };
 
     setTasks(state => {
       return state.map(todo => {
-        if(todo.id === id) {
+        if (todo.id === id) {
           return {
             ...todo,
             done: todo.done === false ? true : false
@@ -41,10 +49,25 @@ export function Home() {
   }
 
   function handleRemoveTask(id: number) {
-    const todos = [...tasks];
-    const removeTodoById = todos.filter(todo => todo.id !== id);
+    Alert.alert(
+      'Remover item',
+      'Tem certeza que você deseja remover esse item?',
+      [
+        {
+          text: 'Sim',
+          onPress: () => {
+            const todos = [...tasks];
+            const removeTodoById = todos.filter(todo => todo.id !== id);
 
-    setTasks(removeTodoById);
+            setTasks(removeTodoById);
+          }
+        },
+        {
+          text: 'Não',
+          style: 'cancel'
+        }
+      ]
+    )
   }
 
   return (
