@@ -70,6 +70,22 @@ export function Home() {
     )
   }
 
+  function handleEditTask(id: number, editedTask: string) {
+    const todos = [...tasks]
+    const updateTodoById = todos.map(todo => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          title: editedTask
+        }
+      }
+
+      return todo
+    })
+
+    setTasks(updateTodoById)
+  }
+
   return (
     <View style={styles.container}>
       <Header tasksCounter={tasks.length} />
@@ -80,6 +96,7 @@ export function Home() {
         tasks={tasks}
         toggleTaskDone={handleToggleTaskDone}
         removeTask={handleRemoveTask}
+        editTask={handleEditTask}
       />
     </View>
   )
